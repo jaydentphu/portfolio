@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="404 — Jayden Phu" description="Page not found.">
+  <div class="page">
+    <p class="err-code">404</p>
+    <div class="terminal" role="presentation">
+      <span class="prompt">jayden@dev</span><span class="dim">:~$</span> cat requested-page<br />
+      <span class="err">cat: requested-page: No such file or directory</span><br />
+      <span class="prompt">jayden@dev</span><span class="dim">:~$</span> <span class="dim">try one of these instead —</span>
+    </div>
+    <div class="hero-cta">
+      <a href="/" class="btn btn-primary">cd ~/home</a>
+      <a href="/#projects" class="btn btn-secondary">view projects</a>
+    </div>
+  </div>
+</Base>

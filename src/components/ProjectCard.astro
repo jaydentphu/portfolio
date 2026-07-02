@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, summary, status, tags } = project.data;
+const tagKinds = ['kw', 'str', 'fn'];
+---
+
+<a class="card tilt" href={`/projects/${project.id}/`}>
+  <div class="card-top">
+    <span class="card-status"><span class="dot" aria-hidden="true"></span>{status}</span>
+    <span class="card-link">case study →</span>
+  </div>
+  <h3>{title}</h3>
+  <p>{summary}</p>
+  <div class="tags">
+    {tags.map((tag, i) => <span class={`tag ${tagKinds[i % tagKinds.length]}`}>{tag}</span>)}
+  </div>
+</a>

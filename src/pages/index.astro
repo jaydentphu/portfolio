@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { SITE } from '../consts';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<Base title={SITE.title} description={SITE.description}>
+  <section class="hero">
+    <div class="hero-text">
+      <div class="eyebrow">
+        <span class="dot" aria-hidden="true"></span>open to summer 2027 internships
+      </div>
+      <h1 class="tokenized" id="tokenHeadline">
+        I build systems that understand language — and the structure underneath it.
+      </h1>
+      <p class="subhead">
+        <span class="typed" id="typedText"></span><span class="cur" aria-hidden="true"></span>
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">view projects</a>
+        <a href="/resume.pdf" class="btn btn-secondary">download resume</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="section-head">
+      <h2>projects</h2>
+      <span class="path">/// selected work</span>
+    </div>
+    <div class="projects-grid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="section-head">
+      <h2>skills</h2>
+      <span class="path">/// stack.js</span>
+    </div>
+    <div class="import-block">
+      <span class="comment">// languages, frameworks, tools — in no particular order</span><br />
+      <span class="kw">import</span> {'{'}<br />
+      &nbsp;&nbsp;<span class="skill">Python</span>, <span class="skill">TypeScript</span>, <span class="skill">C++</span>, <span class="skill">SQL</span>,<br />
+      &nbsp;&nbsp;<span class="skill">PyTorch</span>, <span class="skill">React</span>, <span class="skill">FastAPI</span>, <span class="skill">Node.js</span>,<br />
+      &nbsp;&nbsp;<span class="skill">Claude API</span>, <span class="skill">Make.com</span>, <span class="skill">Git</span>,<br />
+      &nbsp;&nbsp;<span class="skill">Formal Syntax</span>, <span class="skill">Computational Linguistics</span><br />
+      {'}'} <span class="kw">from</span> <span class="str">'jayden/skills'</span>;
+    </div>
+  </section>
+</Base>
+
+<script>
+  // ---------- tokenized hero headline (words get POS tags on hover) ----------
+  const words: [string, string | null][] = [
+    ['I', 'PRON'], ['build', 'VERB'], ['systems', 'NOUN'], ['that', 'DET'],
+    ['understand', 'VERB'], ['language', 'NOUN'], ['—', null], ['and', 'CONJ'],
+    ['the', 'DET'], ['structure', 'NOUN'], ['underneath', 'PREP'], ['it.', 'NOUN'],
+  ];
+  const headline = document.getElementById('tokenHeadline')!;
+  headline.innerHTML = words
+    .map(([w, tag]) => {
+      if (!tag) return w + ' ';
+      return `<span class="word">${w}<span class="tag" aria-hidden="true">${tag}</span></span> `;
+    })
+    .join('');
+
+  // ---------- typewriter subhead ----------
+  const typedEl = document.getElementById('typedText')!;
+  const fullText = 'jayden phu — cs + linguistics @ ucla, building ai automation.';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    typedEl.textContent = fullText;
+  } else {
+    let i = 0;
+    function typeNext() {
+      if (i <= fullText.length) {
+        typedEl.textContent = fullText.slice(0, i);
+        i++;
+        setTimeout(typeNext, 38);
+      }
+    }
+    setTimeout(typeNext, 600);
+  }
+
+  // ---------- card tilt ----------
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (fine) {
+    document.querySelectorAll<HTMLElement>('.tilt').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        const rotateX = (y / r.height - 0.5) * -8;
+        const rotateY = (x / r.width - 0.5) * 8;
+        card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(0)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(600px) rotateX(0) rotateY(0)';
+      });
+    });
+  }
+</script>
