@@ -58,6 +58,20 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       <slot />
     </main>
 
+    <div class="cs-overlay" id="csOverlay" hidden>
+      <div class="cs-overlay-backdrop" id="csOverlayBackdrop"></div>
+      <div
+        class="cs-overlay-panel"
+        id="csOverlayPanel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Case study"
+      >
+        <button class="cs-overlay-close" id="csOverlayClose">close [esc]</button>
+        <div id="csOverlayContent"></div>
+      </div>
+    </div>
+
     <footer id="contact">
       <h2>Let's build something.</h2>
       <p>
@@ -123,6 +137,121 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
           ring.classList.toggle('active', !!t);
         });
       }
+    </script>
+
+    <script>
+      // ---------- case study overlay ----------
+      // Case study links open in an in-page overlay. The full pages still exist
+      // (deep links, SEO, no-JS fallback); the URL updates via pushState so
+      // back/forward and refresh behave normally.
+      const overlay = document.getElementById('csOverlay')!;
+      const panel = document.getElementById('csOverlayPanel')!;
+      const contentEl = document.getElementById('csOverlayContent')!;
+      const backdrop = document.getElementById('csOverlayBackdrop')!;
+      const closeBtn = document.getElementById('csOverlayClose')!;
+
+      type Entry = { html: string; title: string };
+      const cache = new Map<string, Entry>();
+      const baseTitle = document.title;
+      const baseUrl = location.pathname;
+      let lastFocus: HTMLElement | null = null;
+      let isOpen = false;
+
+      async function load(href: string): Promise<Entry | null> {
+        const cached = cache.get(href);
+        if (cached) return cached;
+        try {
+          const res = await fetch(href);
+          if (!res.ok) return null;
+          const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+          const page = doc.querySelector('.page');
+          if (!page) return null;
+          page.querySelector('.back-link')?.remove();
+          const entry = { html: page.innerHTML, title: doc.title };
+          cache.set(href, entry);
+          return entry;
+        } catch {
+          return null;
+        }
+      }
+
+      async function show(href: string, push: boolean) {
+        const entry = await load(href);
+        if (!entry) {
+          window.location.href = href; // graceful fallback: full page
+          return;
+        }
+        contentEl.innerHTML = entry.html;
+        document.title = entry.title;
+        overlay.hidden = false;
+        isOpen = true;
+        document.documentElement.style.overflow = 'hidden';
+        panel.scrollTop = 0;
+        lastFocus = document.activeElement as HTMLElement;
+        closeBtn.focus();
+        if (push) history.pushState({ caseStudy: href }, '', href);
+      }
+
+      function hide() {
+        overlay.hidden = true;
+        isOpen = false;
+        document.documentElement.style.overflow = '';
+        document.title = baseTitle;
+        lastFocus?.focus();
+      }
+
+      document.addEventListener('click', (e) => {
+        if (e.defaultPrevented || e.button !== 0) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        const link = (e.target as Element).closest('a');
+        if (!link || link.target === '_blank') return;
+        const href = link.getAttribute('href') ?? '';
+        if (!/^\/projects\/[^/]+\/?$/.test(href)) return;
+        const normalized = href.endsWith('/') ? href : href + '/';
+        if (location.pathname === normalized) return; // already on the full page
+        e.preventDefault();
+        show(normalized, true);
+      });
+
+      const requestClose = () => {
+        if (!isOpen) return;
+        if (history.state?.caseStudy) history.back();
+        else {
+          hide();
+          history.replaceState(null, '', baseUrl);
+        }
+      };
+      closeBtn.addEventListener('click', requestClose);
+      backdrop.addEventListener('click', requestClose);
+
+      document.addEventListener('keydown', (e) => {
+        if (!isOpen) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          requestClose();
+        } else if (e.key === 'Tab') {
+          // keep focus inside the dialog
+          const focusables = panel.querySelectorAll<HTMLElement>(
+            'button, a[href], [tabindex]:not([tabindex="-1"])'
+          );
+          if (focusables.length === 0) return;
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      });
+
+      window.addEventListener('popstate', (e) => {
+        const state = (e.state ?? {}) as { caseStudy?: string };
+        if (state.caseStudy) show(state.caseStudy, false);
+        else if (isOpen) hide();
+      });
     </script>
   </body>
 </html>

@@ -386,6 +386,46 @@ footer p { color: var(--text-dim); margin-bottom: 32px; max-width: 440px; }
   color: var(--text-dim); font-style: italic;
 }
 
+/* ---------- case study overlay ---------- */
+.cs-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px;
+}
+.cs-overlay[hidden] { display: none; }
+.cs-overlay-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(8, 8, 14, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: overlayFade .25s ease;
+}
+.cs-overlay-panel {
+  position: relative;
+  width: 100%; max-width: 860px; max-height: 100%;
+  overflow-y: auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-bright);
+  border-radius: 14px;
+  padding: 20px 56px 56px;
+  animation: overlayIn .28s ease;
+}
+.cs-overlay-close {
+  position: sticky; top: 0; z-index: 2;
+  display: block; margin-left: auto;
+  font-family: var(--font-code); font-size: 12px;
+  color: var(--text-dim);
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+  padding: 8px 14px;
+  transition: color .2s ease, border-color .2s ease;
+}
+.cs-overlay-close:hover { color: var(--violet); border-color: var(--violet); }
+.cs-overlay-panel .page-head { margin-top: 8px; }
+@keyframes overlayFade { from { opacity: 0; } }
+@keyframes overlayIn { from { opacity: 0; transform: translateY(18px); } }
+
 /* 404 */
 .err-code {
   font-family: var(--font-display); font-size: clamp(72px, 14vw, 140px);
@@ -412,6 +452,8 @@ footer p { color: var(--text-dim); margin-bottom: 32px; max-width: 440px; }
   footer { padding: 64px 24px 80px; }
   .import-block { padding: 24px 20px; }
   .built-with { padding: 22px 20px; }
+  .cs-overlay { padding: 12px; }
+  .cs-overlay-panel { padding: 14px 22px 40px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
