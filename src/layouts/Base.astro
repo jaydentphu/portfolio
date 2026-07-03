@@ -1,4 +1,5 @@
 ---
+import Analytics from '@vercel/analytics/astro';
 import { SITE } from '../consts';
 import '../styles/global.css';
 
@@ -35,6 +36,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+    <Analytics />
   </head>
   <body>
     <a class="skip-link" href="#main">skip to content</a>
