@@ -43,25 +43,24 @@ const projects = (await getCollection('projects')).sort(
       <h2>about</h2>
       <span class="path">/// whoami</span>
     </div>
-    <div class="about-text">
-      <p>
-        I'm Jayden — a <strong>CS + Linguistics double major at UCLA</strong>. The
-        pairing is deliberate: linguistics is language as a formal system, and I
-        want to build software that actually works with that system — which today
-        means AI.
-      </p>
-      <p>
-        Right now that looks like an internship at <strong>MDBL</strong>, building
-        AI automation for a dental-practice brokerage's deal pipeline, and a side
-        project <a href="/projects/kalshi-trading-bot/">trading bot for Kalshi</a> —
-        an excuse to go deep on asyncio and failure handling. Before UCLA I founded
-        <strong>Kode for Kids</strong>, a free coding program that taught Python and
-        Java to 100+ middle schoolers in Monterey Park.
-      </p>
-      <p>
-        Off the clock: syntax trees, prediction markets, and finding the best
-        noodles in the San Gabriel Valley.
-      </p>
+    <div class="term-window">
+      <div class="term-bar">
+        <span class="term-dot" style="background: var(--violet)" aria-hidden="true"></span>
+        <span class="term-dot" style="background: var(--amber)" aria-hidden="true"></span>
+        <span class="term-dot" style="background: var(--green)" aria-hidden="true"></span>
+        <span class="term-title">~/jayden/about.sh</span>
+      </div>
+      <div class="term-body">
+        <div class="term-cmd"><span class="prompt">$</span> whoami</div>
+        <div class="term-out">rising sophomore — cs + linguistics double major. i study how language works, then build systems that use it.</div>
+        <div class="term-cmd"><span class="prompt">$</span> cat now.txt</div>
+        <div class="term-out">building with llms · learning pytorch properly · reading about tokenizers more than is strictly normal</div>
+        <div class="term-cmd"><span class="prompt">$</span> grep -i "why" story.md</div>
+        <div class="term-out">syntax trees and neural nets turned out to be the same hobby: <span class="hl">finding the structure underneath language.</span></div>
+        <div class="term-cmd"><span class="prompt">$</span> ls goals/</div>
+        <div class="term-out term-ls"><span>ai-engineering-internship/</span><span>ship-something-people-use/</span></div>
+        <div class="term-cmd"><span class="prompt">$</span> <span class="term-cursor" aria-hidden="true"></span></div>
+      </div>
     </div>
   </section>
 
