@@ -22,7 +22,7 @@ src/
   content/projects/       case studies — one Markdown file each
   layouts/Base.astro      shared shell: head/SEO, nav, footer, custom cursor
   components/             ProjectCard
-  pages/                  index, about, 404, projects/[slug]
+  pages/                  index (hero, projects, about, skills), 404, projects/[slug]
   styles/global.css       the whole design system
 public/
   resume.pdf              served at /resume.pdf (stable path)
