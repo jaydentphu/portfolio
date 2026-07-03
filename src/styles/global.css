@@ -107,7 +107,7 @@ nav {
 .logo .caret {
   display: inline-block; width: 8px; height: 16px; background: var(--amber);
   margin-left: 2px; vertical-align: -3px;
-  animation: blink 1.8s steps(1) infinite;
+  animation: blink 5s steps(1) infinite;
 }
 @keyframes blink { 50% { opacity: 0; } }
 .nav-links { display: flex; gap: 32px; }
@@ -169,7 +169,7 @@ h1.tokenized .word:hover .tag { opacity: 1; transform: translateY(0); }
 .subhead .typed { color: var(--text); }
 .subhead .cur {
   display: inline-block; width: 8px; height: 16px; background: var(--violet);
-  vertical-align: -3px; animation: blink 1.8s steps(1) infinite;
+  vertical-align: -3px; animation: blink 5s steps(1) infinite;
 }
 
 .hero-cta { display: flex; gap: 16px; margin-top: 44px; flex-wrap: wrap; }
@@ -278,7 +278,7 @@ section { max-width: 1100px; margin: 0 auto; padding: 120px 48px; }
 .term-cursor {
   display: inline-block; width: 8px; height: 15px;
   background: var(--violet); vertical-align: -2px;
-  animation: blink 1.8s steps(1) infinite;
+  animation: blink 5s steps(1) infinite;
 }
 
 /* ---------- skills as import ---------- */
@@ -494,6 +494,12 @@ footer p { color: var(--text-dim); margin-bottom: 32px; max-width: 440px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
+  /* iteration-count: 1 matters: without it, infinite animations (blink,
+     pulse) loop at 0.001s and strobe instead of stopping */
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
   html { scroll-behavior: auto; }
 }
