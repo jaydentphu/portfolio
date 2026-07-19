@@ -34,9 +34,6 @@ same frontmatter shape as the existing ones — it gets a card on the home page
 and its own page automatically.
 
 ## Before launch (TODOs)
-
-- [ ] Replace `CHANGEME` GitHub/LinkedIn URLs in `src/consts.ts`
 - [ ] Add real repo/demo links to case study frontmatter
 - [ ] Review the TODO comments inside both case studies (verify claims, MDBL sign-off)
-- [ ] Set the real domain in `astro.config.mjs`
 - [ ] Social share image (`og:image`) — currently text-only previews
