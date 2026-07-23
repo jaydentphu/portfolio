@@ -2,7 +2,7 @@
 title: "Notion CRM Migration"
 summary: "Restructured a dental-practice brokerage's multi-database Notion CRM — normalized fragile rollups into editable fields and migrated 98 legacy records without data loss, then automated intake with Make.com."
 status: "in production"
-period: "2026 · MDBL internship"
+period: "2026 · MDBL"
 order: 1
 tags: ["data-modeling", "notion", "make.com", "automation"]
 builtWith:

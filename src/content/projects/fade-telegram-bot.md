@@ -15,7 +15,7 @@ builtWith:
   - name: "SQLAlchemy + Postgres"
     note: "users, positions, leaderboards, clan state, and an idempotency ledger that survives restarts"
 # TODO: add the real repo URL and a demo clip/screenshot of a live Fade broadcast card
-# repo: "https://github.com/CHANGEME/fade"
+repo: "https://github.com/jaydentphu/fade"
 ---
 
 <!-- TODO(jayden): verify every claim below against docs/HANDOFF.md before publishing,
