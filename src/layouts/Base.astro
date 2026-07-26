@@ -52,7 +52,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       <div class="nav-links">
         <a href="/#projects">projects</a>
         <a href="/#about">about</a>
-        <a href="/resume.pdf">resume</a>
+        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">resume</a>
       </div>
     </nav>
 
@@ -84,7 +84,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         <a href={`mailto:${SITE.email}`}>email</a>
         <a href={SITE.github} target="_blank" rel="noopener noreferrer">github</a>
         <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">linkedin</a>
-        <a href="/resume.pdf">resume.pdf</a>
+        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">resume.pdf</a>
       </div>
     </footer>
 
