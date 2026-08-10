@@ -11,6 +11,7 @@ interface Props {
 
 const { title, description = SITE.description, ogType = 'website' } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+const ogImage = Astro.site ? new URL('/og-image.png', Astro.site) : undefined;
 ---
 
 <!doctype html>
@@ -28,7 +29,11 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     <meta property="og:type" content={ogType} />
     {canonical && <meta property="og:url" content={canonical} />}
     <meta property="og:site_name" content={SITE.name} />
-    <meta name="twitter:card" content="summary" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -81,7 +86,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         Reach out however's easiest.
       </p>
       <div class="contact-links">
-        <a href={`mailto:${SITE.email}`}>email</a>
+        <a href={`mailto:${SITE.email}`} target="_blank" rel="noopener noreferrer">email</a>
         <a href={SITE.github} target="_blank" rel="noopener noreferrer">github</a>
         <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">linkedin</a>
         <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">resume.pdf</a>

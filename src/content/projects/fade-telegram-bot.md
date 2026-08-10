@@ -14,13 +14,12 @@ builtWith:
     note: "each user gets their own on-chain wallet; the backend holds trade-scoped signing power only, never withdrawal authority"
   - name: "SQLAlchemy + Postgres"
     note: "users, positions, leaderboards, clan state, and an idempotency ledger that survives restarts"
-# TODO: add the real repo URL and a demo clip/screenshot of a live Fade broadcast card
+# TODO: add a demo clip/screenshot of a live Fade broadcast card
 repo: "https://github.com/jaydentphu/fade"
 ---
 
 <!-- TODO(jayden): verify every claim below against docs/HANDOFF.md before publishing,
-     swap in real deployment numbers once Stage 0 (first real user) happens, and
-     uncomment the repo link above. -->
+     and swap in real deployment numbers once Stage 0 (first real user) happens. -->
 
 ## the problem
 
