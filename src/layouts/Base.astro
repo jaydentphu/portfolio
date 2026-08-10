@@ -37,8 +37,21 @@ const ogImage = Astro.site ? new URL('/og-image.png', Astro.site) : undefined;
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Space Mono is split into its own stylesheet with display=optional: it's
+      the hero H1 font, and Lighthouse measured it as the single biggest CLS
+      contributor on mobile (0.148 of 0.238) because swapping in a
+      differently-metriced font after first paint reflows the headline.
+      `optional` means the browser commits to one font immediately and never
+      swaps mid-visit — zero layout shift, at the cost of occasionally
+      keeping the fallback font on a very slow first load.
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=optional"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <Analytics />
@@ -51,7 +64,7 @@ const ogImage = Astro.site ? new URL('/og-image.png', Astro.site) : undefined;
     <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
     <nav>
-      <a class="logo" href="/" aria-label="Jayden Phu — home">
+      <a class="logo" href="/" aria-label="jayden.dev() — home">
         jayden<span>.dev()</span><span class="caret" aria-hidden="true"></span>
       </a>
       <div class="nav-links">
@@ -108,6 +121,14 @@ const ogImage = Astro.site ? new URL('/og-image.png', Astro.site) : undefined;
         let ringX = mouseX, ringY = mouseY;
         let glowX = mouseX, glowY = mouseY;
 
+        // Only run the trailing-lerp animation loop while the ring/glow are
+        // actually still catching up to the pointer, and stop once settled
+        // instead of looping forever. An rAF loop that never stops keeps the
+        // page "busy" indefinitely, which confused Lighthouse's idle
+        // detection into a ~12s Speed Index / render-delay on a page that
+        // otherwise paints in under a second.
+        let rafId: number | null = null;
+
         window.addEventListener('mousemove', (e) => {
           mouseX = e.clientX;
           mouseY = e.clientY;
@@ -118,10 +139,13 @@ const ogImage = Astro.site ? new URL('/og-image.png', Astro.site) : undefined;
             ring.style.top = mouseY + 'px';
             glow.style.left = mouseX + 'px';
             glow.style.top = mouseY + 'px';
+          } else if (rafId === null) {
+            rafId = requestAnimationFrame(animateCursor);
           }
         });
 
         const lerp = (a: number, b: number, n: number) => (1 - n) * a + n * b;
+        const settled = (a: number, b: number) => Math.abs(a - b) < 0.5;
 
         function animateCursor() {
           ringX = lerp(ringX, mouseX, 0.18);
@@ -134,9 +158,11 @@ const ogImage = Astro.site ? new URL('/og-image.png', Astro.site) : undefined;
           glow.style.left = glowX + 'px';
           glow.style.top = glowY + 'px';
 
-          requestAnimationFrame(animateCursor);
+          const atRest =
+            settled(ringX, mouseX) && settled(ringY, mouseY) &&
+            settled(glowX, mouseX) && settled(glowY, mouseY);
+          rafId = atRest ? null : requestAnimationFrame(animateCursor);
         }
-        if (!reduced) animateCursor();
 
         // grow the ring over anything interactive (delegated, works on all pages)
         document.addEventListener('mouseover', (e) => {

@@ -198,7 +198,9 @@ section { max-width: 1100px; margin: 0 auto; padding: 120px 48px; }
   font-family: var(--font-display); font-size: 28px; font-weight: 700;
 }
 .section-head .path {
-  font-family: var(--font-code); font-size: 13px; color: var(--text-faint);
+  /* text-dim, not text-faint: this is readable label text (Lighthouse
+     flagged text-faint here at 2.59:1, below the 4.5:1 AA minimum) */
+  font-family: var(--font-code); font-size: 13px; color: var(--text-dim);
 }
 
 /* ---------- projects ---------- */
@@ -264,7 +266,8 @@ section { max-width: 1100px; margin: 0 auto; padding: 120px 48px; }
 .term-dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.7; }
 .term-title {
   margin-left: 8px;
-  font-family: var(--font-code); font-size: 12px; color: var(--text-faint);
+  /* text-dim, not text-faint — see .section-head .path above */
+  font-family: var(--font-code); font-size: 12px; color: var(--text-dim);
 }
 .term-body {
   padding: 28px clamp(18px, 3vw, 32px);
