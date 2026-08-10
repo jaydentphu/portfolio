@@ -38,22 +38,50 @@ const ogImage = Astro.site ? new URL('/og-image.png', Astro.site) : undefined;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!--
-      Space Mono is split into its own stylesheet with display=optional: it's
-      the hero H1 font, and Lighthouse measured it as the single biggest CLS
-      contributor on mobile (0.148 of 0.238) because swapping in a
-      differently-metriced font after first paint reflows the headline.
-      `optional` means the browser commits to one font immediately and never
-      swaps mid-visit — zero layout shift, at the cost of occasionally
-      keeping the fallback font on a very slow first load.
+      Two things going on here, both found by testing against real Lighthouse
+      runs rather than guessing:
+
+      1. Space Mono (the hero H1 font) is split into its own stylesheet with
+         display=optional, because it was the single biggest CLS contributor
+         on mobile (0.148 of 0.238) — swapping it in after the fallback font
+         paints reflows the headline. `optional` commits to one font at first
+         paint and never swaps mid-visit, so there's no shift to cause.
+      2. Both stylesheets load via the preload+media-swap pattern instead of
+         a plain blocking <link rel="stylesheet">. A first attempt at fix #1
+         used two ordinary blocking stylesheet tags, which *fixed* CLS but
+         regressed FCP/LCP badly (Lighthouse's render-blocking-resources
+         audit flagged ~2.7s of blocked render time) — two render-blocking
+         font stylesheets is worse than one. This pattern fetches both in
+         parallel without blocking first paint at all.
     -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=optional"
+    />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=optional"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <Analytics />
   </head>
   <body>
