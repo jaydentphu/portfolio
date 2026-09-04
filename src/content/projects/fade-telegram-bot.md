@@ -18,9 +18,6 @@ builtWith:
 repo: "https://github.com/jaydentphu/fade"
 ---
 
-<!-- TODO(jayden): verify every claim below against docs/HANDOFF.md before publishing,
-     and swap in real deployment numbers once Stage 0 (first real user) happens. -->
-
 ## the problem
 
 Polymarket prediction markets are inherently social. People already argue about
