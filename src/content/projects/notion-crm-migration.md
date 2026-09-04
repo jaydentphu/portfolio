@@ -16,11 +16,6 @@ builtWith:
     note: "one operational data model as the single source of truth, replacing disconnected views"
 ---
 
-<!-- TODO(jayden): this is grounded directly in your resume bullets. If you're
-     comfortable sharing more — how many agents, what the onboarding framework
-     actually documents, a concrete before/after example — add it to the
-     results section below to make it more specific. -->
-
 ## the context
 
 **Moving Dentists Building Legacies** is a dental-practice brokerage in Yorba Linda,

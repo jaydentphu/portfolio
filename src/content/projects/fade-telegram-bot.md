@@ -9,12 +9,11 @@ builtWith:
   - name: "Python + python-telegram-bot"
     note: "async handlers for a bot whose only UI is chat messages, inline keyboards, and DMs"
   - name: "Polymarket's builder SDK"
-    note: "authenticated CLOB trading, market orders with a slippage guard, and tamper-proof builder-fee attribution on every order"
+    note: "authenticated CLOB trading, market orders with a slippage guard, and signed builder-fee attribution on every order"
   - name: "Per-user deposit wallets"
     note: "each user gets their own on-chain wallet; the backend holds trade-scoped signing power only, never withdrawal authority"
   - name: "SQLAlchemy + Postgres"
     note: "users, positions, leaderboards, clan state, and an idempotency ledger that survives restarts"
-# TODO: add a demo clip/screenshot of a live Fade broadcast card
 repo: "https://github.com/jaydentphu/fade"
 ---
 
@@ -49,8 +48,8 @@ does:
   can't leak a key.
 - **Every trade is an idempotent, builder-attributed order.** Each order carries a
   client-generated key so a retried Telegram webhook update can never place the same
-  trade twice, and every order carries Fade's builder code so Polymarket computes and
-  pays the trading fee automatically, no custom fee logic anywhere in the codebase.
+  trade twice, and every order carries Fade's builder code so fee computation stays
+  Polymarket's job rather than custom logic anywhere in the codebase.
 - **The social layer is broadcast, not polling.** When someone trades in a group, the
   bot posts a trade card with **Fade** and **Copy** buttons underneath it. One tap
   either takes the opposite side of the market or mirrors it, and the reply posts back
