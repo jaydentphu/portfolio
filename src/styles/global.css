@@ -217,7 +217,11 @@ section { max-width: 1100px; margin: 0 auto; padding: 120px 48px; }
   will-change: transform;
 }
 .card:hover { border-color: var(--border-bright); background: var(--surface-hover); }
-.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; gap: 12px; }
+/* flex-wrap: a long status like "phase 1 complete · results pending" plus the
+   link is wider than a card's inner width, so the link drops to its own row
+   (kept right-aligned) instead of hanging outside the card */
+.card-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; gap: 8px 12px; }
+.card-top .card-link { margin-left: auto; }
 .card-status {
   display: flex; align-items: center; gap: 6px;
   font-family: var(--font-code); font-size: 11px; color: var(--green);
@@ -427,6 +431,17 @@ footer p { color: var(--text-dim); margin-bottom: 32px; max-width: 440px; }
   color: var(--text-dim); font-style: italic;
 }
 
+/* images in case study prose: diagrams and dashboard screenshots */
+.prose img {
+  display: block; max-width: 100%; height: auto;
+  border: 1px solid var(--border); border-radius: 12px;
+}
+/* A paragraph holding only an image scrolls sideways instead of overflowing
+   the page. On phones a wide diagram keeps a readable minimum width (see the
+   mobile block below) rather than shrinking its small mono text to a few px. */
+.prose p:has(> img) { overflow-x: auto; margin: 28px 0; }
+.prose img[src$=".svg"] { width: 100%; }
+
 /* ---------- case study overlay ---------- */
 .cs-overlay {
   position: fixed; inset: 0; z-index: 500;
@@ -495,6 +510,10 @@ footer p { color: var(--text-dim); margin-bottom: 32px; max-width: 440px; }
   .built-with { padding: 22px 20px; }
   .cs-overlay { padding: 12px; }
   .cs-overlay-panel { padding: 14px 22px 40px; }
+  .prose img[src$=".svg"] { min-width: 860px; }
+  /* longest built-with names (e.g. "PostgreSQL + SQLAlchemy + Alembic") are
+     wider than the panel inside the overlay on a 375px phone */
+  .built-with .bw-name { white-space: normal; }
 }
 
 @media (prefers-reduced-motion: reduce) {

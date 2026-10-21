@@ -3,7 +3,7 @@ title: "Notion CRM & AI Automation"
 summary: "Architected a centralized Notion CRM and operational data model from scratch for a dental-practice brokerage, then extended it with AI agents that autonomously update records and a governance framework so new agents run consistently across the business."
 status: "in production"
 period: "May 2026 – present · Moving Dentists Building Legacies"
-order: 1
+order: 0
 tags: ["ai-agents", "notion", "data-modeling", "automation"]
 builtWith:
   - name: "Notion"

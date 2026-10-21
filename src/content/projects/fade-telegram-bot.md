@@ -3,7 +3,7 @@ title: "Fade"
 summary: "A Telegram-native trading bot for Polymarket prediction markets — solo trading, per-user non-custodial wallets, and a social layer where friends copy or fade each other's trades with one tap."
 status: "code-complete · pre-launch"
 period: "2026 · personal project"
-order: 0
+order: 2
 tags: ["python", "telegram", "asyncio", "polymarket", "sqlalchemy", "postgres"]
 builtWith:
   - name: "Python + python-telegram-bot"

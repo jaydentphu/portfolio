@@ -3,7 +3,7 @@ title: "DoseGuard"
 summary: "An AI verification layer that catches medication-translation errors invisible to standard translation tools — independent back-translation checks, semantic drift detection, and a dedicated diacritic validator for Yoruba, where one dropped accent mark can silently double a dose."
 status: "hackathon prototype"
 period: "24 hours · SoCal Claude Builder Club Hackathon · team of 4"
-order: 2
+order: 3
 tags: ["claude", "nextjs", "typescript", "react", "tailwind"]
 builtWith:
   - name: "Semantic drift detection"
