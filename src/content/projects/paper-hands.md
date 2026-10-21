@@ -45,7 +45,7 @@ I planned it before I built it. A PRD, a set of engineering rules, and a stage-b
 
 ## what was hard
 
-**The credential could do more than the project was allowed to.** I tested the Robinhood connection first, in a throwaway script. Headless OAuth worked, and the token renewed itself for about 9 days at a time. It also came back with 73 tools, including every function that places, cancels, or exercises an order, and Robinhood offers no read-only scope. Nothing about the credential would protect me, so I built the boundary myself. The agent gets five bound functions and never sees the gateway or the adapter. The transport layer keeps its own separate list of seven read-only tool names. A dedicated CI job fails the build if either list changes, if order-placement strings show up in the agent code, or if the worker's environment declares anything with EXEC, TRADING, or AGENTIC in its name.
+**The credential could do more than the project was allowed to.** I tested the Robinhood connection first, in a throwaway script. Headless OAuth worked, and the token renewed itself for about 9 days at a time. It also came back with 73 tools, including every function that places, cancels, or exercises an order, and Robinhood offers no read-only scope. Nothing about the credential would protect me, so I built the boundary myself. The agent gets five bound functions and never sees the gateway or the adapter. The transport layer keeps its own separate list of seven read-only tool names. A dedicated CI job fails the build if the agent's five-function list changes, if order-placement strings show up in the agent code, or if the worker's environment declares anything with EXEC, TRADING, or AGENTIC in its name.
 
 **A strategy bug that looked like a feature.** The screener picked the contract closest to a target expiry and then closest to the money, and because of that order it could quietly drift far out of the money to find something under the premium cap. I added a hard 2% moneyness limit so it returns no-trade instead of reaching. Around the same time I ran the strategy past a second model, which suggested letting code choose the direction and contract and having the agent only explain the result. I declined, because that would have turned the experiment into the screener compared with itself.
 
@@ -55,12 +55,8 @@ I planned it before I built it. A PRD, a set of engineering rules, and a stage-b
 
 ## results & takeaways
 
-The pipeline runs end to end on live data. The first full run captured 3,852 option contracts across 5 tickers in about a minute, produced 15 decisions, and opened one simulated position. There are 154 tests across 6 CI jobs with mypy in strict mode, and the safety boundary has a job of its own.
+The pipeline runs end to end on live data. The first live snapshot pulled 3,852 option contracts across 5 tickers in 61 seconds, and the first full run produced 15 decisions and opened one simulated position. There are 154 tests across 6 CI jobs with mypy in strict mode, and the safety boundary has a job of its own.
 
 The experiment itself is still running. A position takes 5 trading days to mature and the evaluator only scores closed ones, so the scoreboard fills in over weeks. I will publish per-cohort hit rate, P&L, and drawdown here once there are enough closed positions to mean something, including if the agent loses to the screener. Everything the dashboard shows is simulated with conservative fills.
 
-![The Today view, showing each strategy's decision for a ticker side by side with the validator's verdict.](/projects/paper-hands/today.png)
-
 The honest gaps are that this is a personal tool with no other users and that it has never placed a real order. My own end-of-build review ranked the most likely bugs, and the top one is a scheduler that keeps its jobs in memory, so if the worker is down at 10:30 ET the whole day is skipped. That already cost me one run. Fixing it is next. Real money only enters the conversation after I have read a few weeks of scored results and built per-trade approval and loss limits that live in code.
-
-![The Scoreboard view, comparing the three cohorts on hit rate, P&L, and drawdown. All figures are simulated with conservative fills.](/projects/paper-hands/scoreboard.png)
